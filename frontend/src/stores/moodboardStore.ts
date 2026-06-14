@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { MoodBoard } from '../types';
 import { db } from '../utils/db';
+import { mockInspiration } from '../api/mockInspiration';
 
 export const useMoodboardStore = defineStore('moodboards', {
   state: () => ({ boards: [] as MoodBoard[] }),
@@ -8,7 +9,7 @@ export const useMoodboardStore = defineStore('moodboards', {
     async load() {
       this.boards = await db.moodboards.orderBy('createdAt').reverse().toArray();
       if (!this.boards.length) {
-        await this.createBoard('安静木色家', '低饱和木色、自然光和轻收纳', []);
+        await this.createBoard('安静木色家', '低饱和木色、自然光和轻收纳', mockInspiration.map((i) => i.id));
       }
     },
     async createBoard(name: string, description: string, imageIds: string[]) {
